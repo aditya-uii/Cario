@@ -195,7 +195,7 @@ export default function CarDetailsScreen() {
             className="h-11 px-7 rounded-full bg-emerald-400 items-center justify-center"
             onPress={() =>
               router.push({
-                pathname: "/booking",
+                pathname: "/booking/payment",
                 params: {
                   name,
                   price: String(pricePerDay),

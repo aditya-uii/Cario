@@ -54,23 +54,24 @@ export default function ProfileScreen() {
         </View>
 
         {/* Switch to owner mode */}
-        <TouchableOpacity
-          className="mt-4 w-full bg-emerald-400/10 border border-emerald-400/50 rounded-2xl px-4 py-3 flex-row items-center"
-          onPress={() => router.push("/owner")}
-        >
-          <View className="w-8 h-8 rounded-full bg-emerald-400 items-center justify-center">
-            <Ionicons name="car-sport-outline" size={18} color="black" />
-          </View>
-          <View className="ml-3 flex-1">
-            <Text className="text-[13px] text-white font-semibold">
-              Switch to owner dashboard
-            </Text>
-            <Text className="text-[11px] text-zinc-400 mt-0.5">
-              Manage your cars, bookings and earnings.
-            </Text>
-          </View>
-          <Ionicons name="chevron-forward" size={18} color="#71717a" />
-        </TouchableOpacity>
+       <TouchableOpacity
+  className="mt-4 w-full bg-emerald-400/10 border border-emerald-400/50 rounded-2xl px-4 py-3 flex-row items-center"
+  onPress={() => router.push("/owner")}   // 👈 important
+>
+  <View className="w-8 h-8 rounded-full bg-emerald-400 items-center justify-center">
+    <Ionicons name="car-sport-outline" size={18} color="black" />
+  </View>
+  <View className="ml-3 flex-1">
+    <Text className="text-[13px] text-white font-semibold">
+      Switch to owner dashboard
+    </Text>
+    <Text className="text-[11px] text-zinc-400 mt-0.5">
+      Manage your cars, bookings and earnings.
+    </Text>
+  </View>
+  <Ionicons name="chevron-forward" size={18} color="#71717a" />
+</TouchableOpacity>
+
 
         {/* Account section */}
         <Text className="text-sm text-zinc-400 font-semibold mt-8 mb-3">
