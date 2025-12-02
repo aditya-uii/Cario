@@ -1,100 +1,238 @@
-import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
+// app/car-details.tsx
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter, useLocalSearchParams } from "expo-router";
 
+type Params = {
+  name?: string;
+  type?: string;
+  price?: string;
+  rating?: string;
+  location?: string;
+};
+
 export default function CarDetailsScreen() {
   const router = useRouter();
-  const { name, type, price, location, rating } = useLocalSearchParams();
+  const params = useLocalSearchParams<Params>();
+
+  const name = params.name ?? "Premium car";
+  const type = params.type ?? "SUV · Petrol · Automatic";
+  const location = params.location ?? "Patna, Bihar";
+  const rating = params.rating ?? "4.8";
+  const pricePerDay = Number(params.price ?? "1999");
+
+  const days = 1; // for now assume 1 day, real days will come from booking screen later
+  const estimatedTotal = pricePerDay * days;
 
   return (
     <SafeAreaView className="flex-1 bg-neutral-950">
-      <ScrollView className="flex-1 px-5" contentContainerStyle={{ paddingBottom: 32 }}>
-
-        {/* Back Button */}
-        <View className="flex-row items-center justify-between mt-2 mb-4">
+      {/* main scroll area */}
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 32 }}
+      >
+        {/* Header */}
+        <View className="px-5 pt-2 pb-3 flex-row items-center justify-between">
           <TouchableOpacity
             className="w-9 h-9 rounded-full bg-zinc-900 items-center justify-center"
             onPress={() => router.back()}
           >
-            <Ionicons name="chevron-back" size={20} />
+            <Ionicons name="chevron-back" size={20} color="#e5e5e5" />
           </TouchableOpacity>
-          <Text className="text-sm text-zinc-300 font-medium">Car details</Text>
-          <View className="w-9 h-9" />
+
+          <Text className="text-sm text-zinc-300 font-medium">
+            Car details
+          </Text>
+
+          <TouchableOpacity className="w-9 h-9 rounded-full bg-zinc-900 items-center justify-center">
+            <Ionicons name="heart-outline" size={20} color="#e5e5e5" />
+          </TouchableOpacity>
         </View>
 
-        {/* Car Info Card */}
-        <View className="bg-zinc-900 rounded-3xl p-4 items-center">
-          <Text className="text-xs text-zinc-400">{location}</Text>
-          <Text className="text-xl text-white font-bold mt-1">{name}</Text>
-          <Text className="text-[12px] text-zinc-500 mt-1">{type}</Text>
+        {/* Car info card */}
+        <View className="px-5 mt-1">
+          <View className="bg-zinc-900 rounded-3xl p-5 border border-zinc-800">
+            <Text className="text-[11px] text-zinc-400 mb-1">
+              {location}
+            </Text>
+            <Text className="text-xl text-white font-semibold">
+              {name}
+            </Text>
+            <Text className="text-[11px] text-zinc-500 mt-1">
+              {type}
+            </Text>
 
-          {/* Car Image */}
-          <Image
-            source={require("../assets/images/hero-car.jpeg")}
-            className="w-full h-48 mt-4"
-            resizeMode="contain"
-          />
+            <Image
+              source={require("../assets/images/hero-car.jpeg")}
+              className="w-full h-40 mt-4"
+              resizeMode="contain"
+            />
 
-          {/* Rating */}
-          <View className="flex-row items-center mt-3">
-            <Ionicons name="star" size={16} />
-<Text className="text-xs text-white ml-1">{rating} · (0 trips)</Text>
-
-          </View>
-        </View>
-
-        {/* Specs */}
-        <View className="flex-row flex-wrap gap-2 mt-5">
-          <View className="px-3 py-2 rounded-full bg-zinc-900"><Text className="text-xs text-white">5 Seats</Text></View>
-          <View className="px-3 py-2 rounded-full bg-zinc-900"><Text className="text-xs text-white">Petrol</Text></View>
-          <View className="px-3 py-2 rounded-full bg-zinc-900"><Text className="text-xs text-white">Manual</Text></View>
-          <View className="px-3 py-2 rounded-full bg-zinc-900"><Text className="text-xs text-white">AC</Text></View>
-          <View className="px-3 py-2 rounded-full bg-zinc-900"><Text className="text-xs text-white">300 km/day free</Text></View>
-        </View>
-
-        {/* Pricing */}
-        <View className="mt-6 bg-zinc-900 rounded-3xl p-4">
-          <View className="flex-row justify-between">
-            <View>
-              <Text className="text-xs text-zinc-400">Estimated fare</Text>
-              <Text className="text-2xl text-white font-bold">₹{price} / day</Text>
-              <Text className="text-xs text-zinc-500 mt-1">Taxes extra · Fuel not included</Text>
-            </View>
-            <View className="items-end">
-              <Text className="text-[11px] text-emerald-400">Free cancellation · 24 hrs</Text>
-              <Text className="text-[11px] text-zinc-500 mt-1">20% advance to confirm</Text>
+            <View className="flex-row items-center justify-between w-full mt-4">
+              <View className="flex-row items-center">
+                <Ionicons name="star" size={16} color="#22c55e" />
+                <Text className="text-xs text-zinc-100 ml-1">
+                  {rating} · Excellent
+                </Text>
+              </View>
+              <Text className="text-[11px] text-zinc-500">
+                120+ trips · Host since 2024
+              </Text>
             </View>
           </View>
         </View>
 
+        {/* Specs pills */}
+        <View className="px-5 mt-5">
+          <Text className="text-sm text-white font-semibold mb-3">
+            Key features
+          </Text>
+
+          <View className="flex-row flex-wrap gap-2">
+            <SpecPill icon="people-outline" label="5 seats" />
+            <SpecPill icon="snow-outline" label="AC available" />
+            <SpecPill icon="flash-outline" label="Petrol / Diesel" />
+            <SpecPill icon="swap-horizontal-outline" label="Manual / Auto" />
+            <SpecPill icon="speedometer-outline" label="300 km/day free" />
+            <SpecPill icon="shield-checkmark-outline" label="Full insurance" />
+            <SpecPill icon="location-outline" label="Doorstep delivery" />
+          </View>
+        </View>
+
+        {/* Price breakdown card */}
+        <View className="px-5 mt-6">
+          <Text className="text-sm text-white font-semibold mb-3">
+            Pricing summary
+          </Text>
+
+          <View className="bg-zinc-900 rounded-3xl p-4 border border-zinc-800">
+            <View className="flex-row items-center justify-between mb-2">
+              <Text className="text-[12px] text-zinc-400">
+                Base fare (per day)
+              </Text>
+              <Text className="text-[13px] text-zinc-100 font-semibold">
+                ₹{pricePerDay}
+              </Text>
+            </View>
+
+            <View className="flex-row items-center justify-between mb-2">
+              <Text className="text-[12px] text-zinc-400">Rental days</Text>
+              <Text className="text-[13px] text-zinc-100 font-semibold">
+                {days} day
+              </Text>
+            </View>
+
+            <View className="flex-row items-center justify-between mb-2">
+              <Text className="text-[12px] text-zinc-400">
+                Convenience fee
+              </Text>
+              <Text className="text-[13px] text-zinc-100 font-semibold">
+                ₹0
+              </Text>
+            </View>
+
+            <View className="border-t border-zinc-800 my-3" />
+
+            <View className="flex-row items-center justify-between">
+              <Text className="text-[13px] text-zinc-300 font-semibold">
+                Estimated total
+              </Text>
+              <Text className="text-lg text-white font-bold">
+                ₹{estimatedTotal}
+              </Text>
+            </View>
+
+            <Text className="text-[10px] text-zinc-500 mt-2">
+              Taxes will be shown on the next step before you pay.
+            </Text>
+          </View>
+        </View>
+
+        {/* Included & rules */}
+        <View className="px-5 mt-6">
+          <Text className="text-sm text-white font-semibold">
+            What&apos;s included
+          </Text>
+          <View className="mt-3 space-y-2">
+            <Bullet text="Basic insurance cover for damages as per policy." />
+            <Bullet text="300 km free per day, extra km at standard charges." />
+            <Bullet text="24x7 roadside assistance in case of breakdown." />
+          </View>
+
+          <Text className="text-sm text-white font-semibold mt-6">
+            Important guidelines
+          </Text>
+          <View className="mt-3 space-y-2">
+            <Bullet text="Original driving licence & Aadhaar required at pickup." />
+            <Bullet text="Late return charges apply post grace period." />
+            <Bullet text="Smoking inside the car is strictly prohibited." />
+          </View>
+        </View>
       </ScrollView>
 
-{/* Sticky Book Button */}
-<View className="bg-neutral-950 border-t border-zinc-900 px-5 py-4">
-  <View className="flex-row justify-between items-center">
-    <View>
-      <Text className="text-xs text-zinc-400">Estimated fare</Text>
-      <Text className="text-xl font-bold text-white">₹{price}</Text>
-      <Text className="text-[11px] text-zinc-500 mt-1">For selected package</Text>
-    </View>
+      {/* Sticky bottom bar */}
+      <View className="px-5 pb-5 pt-3 bg-neutral-950 border-t border-zinc-900">
+        <View className="flex-row items-center justify-between">
+          <View>
+            <Text className="text-[11px] text-zinc-400">Starting from</Text>
+            <Text className="text-lg text-white font-semibold">
+              ₹{pricePerDay}
+              <Text className="text-[11px] text-zinc-400"> / day</Text>
+            </Text>
+            <Text className="text-[11px] text-zinc-500 mt-1">
+              100% refund before trip start
+            </Text>
+          </View>
 
-    {/* Continue to booking button */}
-    <TouchableOpacity
-      className="bg-emerald-400 h-11 px-7 rounded-full items-center justify-center"
-      onPress={() =>
-        router.push({
-          pathname: "/booking",
-          params: { name, price, location },
-        })
-      }
-    >
-      <Text className="text-black text-sm font-semibold">Continue</Text>
-    </TouchableOpacity>
-  </View>
-</View>
-
-
+          <TouchableOpacity
+            className="h-11 px-7 rounded-full bg-emerald-400 items-center justify-center"
+            onPress={() =>
+              router.push({
+                pathname: "/booking",
+                params: {
+                  name,
+                  price: String(pricePerDay),
+                  location,
+                },
+              })
+            }
+          >
+            <Text className="text-sm font-semibold text-black">
+              Continue to booking
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </SafeAreaView>
+  );
+}
+
+type SpecPillProps = {
+  icon: keyof typeof Ionicons.glyphMap;
+  label: string;
+};
+
+function SpecPill({ icon, label }: SpecPillProps) {
+  return (
+    <View className="flex-row items-center bg-zinc-900 rounded-full px-3 py-2">
+      <Ionicons name={icon} size={14} color="#a1a1aa" />
+      <Text className="text-[11px] text-zinc-200 ml-1.5">{label}</Text>
+    </View>
+  );
+}
+
+function Bullet({ text }: { text: string }) {
+  return (
+    <View className="flex-row items-start">
+      <View className="w-1.5 h-1.5 rounded-full bg-zinc-400 mt-1.5 mr-2" />
+      <Text className="text-[12px] text-zinc-300 flex-1">{text}</Text>
+    </View>
   );
 }
