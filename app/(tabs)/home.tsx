@@ -99,20 +99,37 @@ export default function HomeScreen() {
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 32 }}>
 
         {/* Header */}
-        <View className="px-5 pt-2 pb-4 flex-row items-center justify-between">
-          <View>
-            <Text className="text-xs text-zinc-400">Good evening,</Text>
-            <Text className="text-xl text-white font-semibold mt-1">Aditya</Text>
-          </View>
+      {/* Header */}
+<View className="px-5 pt-2 pb-4 flex-row items-center justify-between">
 
-          {/* Go to Profile */}
-          <TouchableOpacity
-            className="w-10 h-10 rounded-full bg-emerald-400/90 items-center justify-center"
-            onPress={() => router.push("/profile")}
-          >
-            <Text className="text-xs font-semibold text-black">AK</Text>
-          </TouchableOpacity>
-        </View>
+  {/* Left side: Logo + Greeting */}
+  <View className="flex-row items-center">
+    {/* LOGO */}
+    <Image
+      source={require("../../assets/images/carigo_logo.jpeg")}
+      className="w-8 h-8 mr-3"
+      resizeMode="contain"
+    />
+
+    {/* Greeting */}
+    <View>
+      <Text className="text-xs text-zinc-400">Good evening,</Text>
+      <Text className="text-xl text-white font-semibold mt-1">
+        Aditya
+      </Text>
+    </View>
+  </View>
+
+  {/* Profile Button */}
+  <TouchableOpacity
+    className="w-10 h-10 rounded-full bg-emerald-400/90 items-center justify-center"
+    onPress={() => router.push("/profile")}
+  >
+    <Text className="text-xs font-semibold text-black">AK</Text>
+  </TouchableOpacity>
+
+</View>
+
 
         {/* Banner slider */}
         <FlatList
